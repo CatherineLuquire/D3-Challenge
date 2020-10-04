@@ -27,11 +27,12 @@ var chartGroup = svg.append("g")
 var chosenXaxis = "age";
 
 // function used for updating x-scale var upon click on axis label
-function xScale(data, chosenXaxis) {
+function xScale(censusData, chosenXaxis) {
     // create scales
     var xLinearScale = d3.scaleLinear()
-        .domain([d3.min(data), d => d[chosenXaxis],
-        d3.max(data), d => d[chosenXaxis]
+        // .domain(d3.extent(chosenXaxis))
+        .domain([d3.min(censusData, d => d[chosenXaxis]),
+        d3.max(censusData, d => d[chosenXaxis])
         ])
         .range([0, width]);
     return xLinearScale;
@@ -69,10 +70,9 @@ function updateToolTip(chosenXaxis, circlesGroup) {
     if (chosenXaxis === "age") {
         label = "Age";
     }
-    if (chosenXaxis === "income") {
+    else if (chosenXaxis === "income") {
         label = "Income";
     }
-
     else {
         label = "Poverty";
     }
@@ -80,7 +80,7 @@ function updateToolTip(chosenXaxis, circlesGroup) {
     var toolTip = d3.tip()
         .attr("class", "tooltip")
         .offset([80, -60])
-        .html(function (d) {
+        .html(function(d) {
             return (`${d.state}<br>${label} ${d[chosenXaxis]}`);
         });
 
@@ -90,7 +90,7 @@ function updateToolTip(chosenXaxis, circlesGroup) {
         toolTip.show(data);
     })
         // onmouseout event
-        .on("mouseout", function(data, index) {
+        .on("mouseout", function(data) {
             toolTip.hide(data);
         });
     return circlesGroup;
@@ -116,8 +116,13 @@ d3.csv("./assets/data/data.csv").then(function(censusData, err) {
     var xLinearScale = xScale(censusData, chosenXaxis);
     // create y scale function
     var yLinearScale = d3.scaleLinear()
-        .domain([0, d3.max(censusData, d => d.heathcare)])
-        .range([height, 0]);
+    .domain([0, d3.max(censusData, d => d.healthcare)])
+    .range([height, 0]);
+    // var yLinearScale = d3.scaleLinear()
+    //     .domain([d3.min(censusData, d => d.healthcare), 
+    //         d3.max(censusData, d => d.heathcare)
+    //     ])
+    //     .range([height, 0]);
 
     // create initial axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
@@ -136,8 +141,8 @@ d3.csv("./assets/data/data.csv").then(function(censusData, err) {
         .data(censusData)
         .enter()
         .append("circle")
-        .attr("cx", d => xLinearScale(d, d.age))
-        .attr("cy", d => yLinearScale(d, d.healthcare))
+        .attr("cx", d => xLinearScale(d.chosenXaxis))
+        .attr("cy", d => yLinearScale(d.healthcare))
         .attr("r", 20)
         .attr("fill", "pink")
         .attr("opacity", ".5");
