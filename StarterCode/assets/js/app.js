@@ -128,10 +128,15 @@ function renderYtext(circlesGroup, newYScale, chosenYaxis) {
 // //     return circlesGroup;
 // // };
 
-
+var formatter = new Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "USD"
+});
 function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
     var xLabel;
     var yLabel;
+    var xpercent = ""
+    var ypercent = ""
 
     if (chosenXaxis === "age") {
         xLabel = "Age";
@@ -141,23 +146,32 @@ function updateToolTip(chosenXaxis, chosenYaxis, circlesGroup) {
     }
     else {
         xLabel = "Poverty";
+        xpercent = "%"
     };
 
     if (chosenYaxis === "healthcare") {
         yLabel = "Healthcare";
+        ypercent = "%"
     }
     else if (chosenYaxis === "obesity") {
         yLabel = "Obesity";
+        ypercent = "%"
     }
     else {
         yLabel = "Smokes";
+        ypercent = "%"
     };
 
     var toolTip = d3.tip()
         .attr("class", "tooltip")
         .offset([80, -60])
         .html(function (d) {
-            return (`<strong>${d.state}</strong><br>${xLabel}: ${d[chosenXaxis]}<br>${yLabel}: ${d[chosenYaxis]}`);
+            if (chosenXaxis === "income"){
+                var incomelevel = formatter.format(d[chosenXaxis]);
+                return (`<strong>${d.state}</strong><br>${xLabel}: ${incomelevel.substring(0, incomelevel.length-3)}${xpercent}<br>${yLabel}: ${d[chosenYaxis]}${ypercent}`);
+
+            }
+            else return (`<strong>${d.state}</strong><br>${xLabel}: ${d[chosenXaxis]}${xpercent}<br>${yLabel}: ${d[chosenYaxis]}${ypercent}`);
         });
 
     circlesGroup.call(toolTip);
@@ -259,52 +273,52 @@ d3.csv("./assets/data/data.csv").then(function(censusData, err) {
         .attr("y", 18)
         .attr("value", "age") // value to grab for event listener
         .classed("active", true)
-        .text("Age");
+        .text("Median Age");
 
     var incomelabel = xlabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", 36)
         .attr("value", "income") // value to grab for event listener
         .classed("inactive", true)
-        .text("Income");
+        .text("Median Household Income");
 
     var povertylabel = xlabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", 54)
         .attr("value", "poverty") // value to grab for event listener
         .classed("inactive", true)
-        .text("Poverty");
+        .text("In Poverty (%)");
 
     // create group for three y-axis labels
     var ylabelsGroup = chartGroup.append("g")
         .attr("transform", "rotate(-90)");
 
     var healthcarelabel = ylabelsGroup.append("text")
-        .attr("y", 0 - margin.left + 30)
+        .attr("y", 0 - margin.left + 50)
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .attr("yValue", "healthcare")
         .classed("active", true)
         .classed("axis-text", true)
-        .text("Healthcare");
+        .text("Lacks Healthcare (%)");
 
     var obesitylabel = ylabelsGroup.append("text")
-        .attr("y", 0 - margin.left + 20)
+        .attr("y", 0 - margin.left + 32)
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .attr("yValue", "obesity")
         .classed("inactive", true)
         .classed("axis-text", true)
-        .text("Obesity");
+        .text("Obesity (%)");
 
     var smokeslabel = ylabelsGroup.append("text")
-        .attr("y", 0 - margin.left + 10)
+        .attr("y", 0 - margin.left + 14)
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .attr("yValue", "smokes")
         .classed("inactive", true)
         .classed("axis-text", true)
-        .text("Smokes");
+        .text("Smokes (%)");
 
     // update tooltip funnction above csv import
     circlesGroup = updateToolTip(chosenXaxis, chosenYaxis, circlesGroup);
