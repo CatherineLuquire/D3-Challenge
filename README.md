@@ -1,6 +1,9 @@
 # D3 Challenge - Interactive Scatterplot 
 
 Created interactive scatterplot with using census data. The user can visualize state by state comparisons of age, income, or poverty with healthcare, smoking, or obesity.
+
+##
+
 ![Scatterplot Demo](images/scatter_demo1.png)
 
 ## Table of contents
