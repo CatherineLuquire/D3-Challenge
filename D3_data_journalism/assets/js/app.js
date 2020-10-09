@@ -242,7 +242,7 @@ d3.csv("./assets/data/data.csv").then(function(censusData, err) {
         .append("circle")
         .attr("cx", d => xLinearScale(d[chosenXaxis]))
         .attr("cy", d => yLinearScale(d[chosenYaxis]))
-        .attr("r", 20)
+        .attr("r", 25)
         .classed("stateCircle", true);
         // .attr("fill", "teal")
         // .attr("opacity", ".5");
@@ -252,14 +252,23 @@ d3.csv("./assets/data/data.csv").then(function(censusData, err) {
             .text(function (d) {
                 return d.abbr})
             .attr("dx", d => xLinearScale(d[chosenXaxis]))
+
             .attr("dy", d => yLinearScale(d[chosenYaxis]))
+        //     .attr("dy", function(d){
+        //         return yLinearScale(d[chosenYaxis]) + circRadius / 2.5
+        // })
             .classed("stateText", true);
             // .attr("dy", ".4em")
             // .attr("dx", "-.5em")
             // .attr("font-size", 16);
     ///////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////
-
+        // ///////////////////////////////////////////////////////
+        // .attr("dy", function(d) {
+        //     // When the size of the text is the radius,
+        //     // adding a third of the radius to the height
+        //     // pushes it into the middle of the circle.
+        //     return yScale(d[curY]) + circRadius / 2.5;
+        //   })
             ///////////////////////////////////////////////////////
 
 
