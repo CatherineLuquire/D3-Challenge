@@ -1,7 +1,9 @@
 # D3 Challenge - Interactive Scatterplot 
 
 Created interactive scatterplot with using census data. The user can visualize state by state comparisons of age, income, or poverty with healthcare, smoking, or obesity.
-![Scatterplot Demo](scatterplot_demo.mov)
+##
+
+![Scatterplot Demo](images/scatter_demo1.png)
 
 ## Table of contents
 
@@ -32,6 +34,8 @@ Usage:
 1. Horizontal Asis: Select "Median Age," "Median Household Income," or "In Poverty(%)" to change datasets. 
 2. Vertical Axis: Select "Smokes(%)," "Obesity(%)," or "Lacks Healthcare(%)"to change  datasets. 
 3. Scroll mouse over different states to view values for selected axis data.
+
+![Scatterplot Demo](images/scatter_demo2.png)
 
 ## Development Process
 
